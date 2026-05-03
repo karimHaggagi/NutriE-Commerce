@@ -1,0 +1,91 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.google.services)
+
+}
+
+kotlin {
+    androidTarget {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "home"
+            isStatic = true
+        }
+    }
+
+
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.android.client)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.darwin.client)
+        }
+        commonMain.dependencies {
+
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.compose.navigation)
+            implementation(libs.kotlinx.serialization)
+
+            implementation(libs.messagebar.kmp)
+
+
+            implementation(project(":core:designsystem"))
+            implementation(project(":core:domain"))
+            implementation(project(":core:model"))
+            implementation(project(":feature:productOverview"))
+            implementation(project(path = ":feature:profile"))
+            implementation(project(path = ":feature:adminPanel"))
+            implementation(project(path = ":feature:manageProduct"))
+            implementation(project(path = ":feature:details"))
+            implementation(project(path = ":feature:cart"))
+            implementation(project(path = ":feature:category"))
+            implementation(project(path = ":feature:categoryProducts"))
+            implementation(project(path = ":feature:checkout"))
+            implementation(project(path = ":feature:paymentStatus"))
+            implementation(project(":core:navigation"))
+
+
+        }
+    }
+}
+
+android {
+    namespace = "com.example.home"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
