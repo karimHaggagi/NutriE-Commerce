@@ -44,7 +44,7 @@ jobs:
 
       # Build the APK
       - name: Build APK
-        run: ./gradlew assembleDebug
+        run:  ./gradlew :composeApp:assembleDebug
       #
       #      # Optional: Upload the APK as an artifact
       #      - name: Upload APK
@@ -63,7 +63,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
           groups: internal-testers
-          file: androidApp/build/outputs/apk/debug/androidApp-debug.apk
+          file: composeApp/build/outputs/apk/debug/composeApp-debug.apk
           releaseNotes: ${{inputs.release_notes}}
 
 
