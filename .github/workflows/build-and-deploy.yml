@@ -10,7 +10,7 @@ on:
       branch:
         description: 'Branch to run the action on'
         required: true
-        default: 'master'
+        default: 'main'
       action:
         description: 'Select the action to run'
         required: true
